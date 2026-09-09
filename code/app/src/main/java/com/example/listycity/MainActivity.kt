@@ -6,6 +6,7 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -28,6 +29,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.setValue
 import androidx.compose.material3.Button
+import androidx.core.view.WindowCompat.enableEdgeToEdge
 
 class CityRepository{
     private val _cities = mutableStateListOf("Edmonton", "Vancouver","Moscow","Sydney","Berlin","Vienna","Tokyo","Beijing","Osaka","New Delhi")
@@ -64,28 +66,36 @@ fun CityListScreen(
     modifier: Modifier = Modifier
 
 ){
-    var newCityName by remember {mutableStateOf(value = "") }
+    var newCityName by remember {mutableStateOf("")}
     Column(modifier = modifier.fillMaxSize()){
-        OutlinedTextField(value = newCityName, onValueChange = {newCityName = it}, label = {Text("City name")}, modifier = Modifier.weight(1f))
-        Spacer(modifier = Modifier.width(8.dp))
-        Button(
-            onClick = {
-                if (newCityName.isNotBlank()) {
-                    onAddCity(newCityName)
-                    newCityName = ""
+        Row(modifier = Modifier.padding(16.dp)) {
+            OutlinedTextField(
+                value = newCityName,
+                onValueChange = { newCityName = it },
+                label = { Text("City name") },
+                modifier = Modifier.weight(1f)
+            )
+            Spacer(modifier = Modifier.width(8.dp))
+            Button(
+                onClick = {
+                    if (newCityName.isNotBlank()) {
+                        onAddCity(newCityName)
+                        newCityName = ""
+                    }
                 }
+            ) {
+                Text("Add City")
             }
-        ) {
-            Text("Add City")
         }
 
-    }
-    LazyColumn(modifier = modifier.fillMaxSize()) {
-        items(cities){ city ->
-            CityRow(city = city)
-        }
-    }
-}
+            LazyColumn(modifier = modifier.fillMaxSize()) {
+                items(cities) { city ->
+                    CityRow(city = city)
+                }
+            }
+
+
+}}
 
 @Composable
 fun CityRow(city: String){
