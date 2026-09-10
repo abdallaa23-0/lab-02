@@ -1,9 +1,11 @@
 package com.example.listycity
 
+import android.R.attr.onClick
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -35,7 +37,7 @@ class CityRepository{
     fun addCity(city:String){
         _cities.add(city)
     }
-    fun deleteCity(city:String){
+    fun deleteCity(city:String){//deletes city from the string list
         _cities.remove(city)
     }
 }
@@ -51,7 +53,7 @@ class MainActivity : ComponentActivity() {
                     CityListScreen(
                         cities = cityRepository.cities,
                         onAddCity = {cityRepository.addCity(it)},
-                        deleteCity = {cityRepository.deleteCity(it)},
+                        deleteCity = {cityRepository.deleteCity(it)},//deletes
                         modifier = Modifier.padding(paddingValues = innerPadding),
                     )
                 }
@@ -70,7 +72,7 @@ fun CityListScreen(
 
 ){
     var newCityName by remember {mutableStateOf("")}
-    var deletedCity by remember{mutableStateOf("")}
+    var deletedCity by remember{mutableStateOf("")}//makes a deleted city variable like new citys var
     Column(modifier = modifier.fillMaxSize()){
         Row(modifier = Modifier.padding(16.dp)) {
             OutlinedTextField(
@@ -95,7 +97,7 @@ fun CityListScreen(
         Button(
             onClick = {
                 if (deletedCity.isNotEmpty()) {
-                    deleteCity(deletedCity)
+                    deleteCity(deletedCity)//deletes the city once the button is clicked(delete city)
                     deletedCity = ""
 
                 }
@@ -106,7 +108,7 @@ fun CityListScreen(
 
             LazyColumn(modifier = modifier.fillMaxSize()) {
                 items(cities) { city ->
-                    CityRow(city = city)
+                    CityRow(city = city, onClick = {deletedCity=city})//selected city becomes deleted
                 }
             }
 
@@ -114,17 +116,20 @@ fun CityListScreen(
 }}
 
 @Composable
-fun CityRow(city: String){
+fun CityRow(city: String, onClick: () -> Unit){
     Text(
         text = city,
         fontSize = 28.sp,
         modifier = Modifier
-            .fillMaxWidth()
+            .fillMaxWidth().clickable(){
+                onClick()//cities are clickable and selected once tapped.
+            }
             .padding(horizontal = 18.dp, vertical = 14.dp)
             .padding(horizontal = 18.dp, vertical = 14.dp)
 
     )
 }
+
 
 
 
