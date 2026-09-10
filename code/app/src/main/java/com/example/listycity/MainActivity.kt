@@ -1,7 +1,6 @@
 package com.example.listycity
 
 import android.os.Bundle
-import android.widget.Button
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
@@ -18,7 +17,6 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.sp
 import com.example.listycity.ui.theme.ListyCityTheme
 import androidx.compose.foundation.lazy.items
@@ -29,7 +27,6 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.setValue
 import androidx.compose.material3.Button
-import androidx.core.view.WindowCompat.enableEdgeToEdge
 
 class CityRepository{
     private val _cities = mutableStateListOf("Edmonton", "Vancouver","Moscow","Sydney","Berlin","Vienna","Tokyo","Beijing","Osaka","New Delhi")
@@ -37,6 +34,9 @@ class CityRepository{
         get() = _cities
     fun addCity(city:String){
         _cities.add(city)
+    }
+    fun deleteCity(city:String){
+        _cities.remove(city)
     }
 }
 
@@ -51,7 +51,8 @@ class MainActivity : ComponentActivity() {
                     CityListScreen(
                         cities = cityRepository.cities,
                         onAddCity = {cityRepository.addCity(it)},
-                        modifier = Modifier.padding(paddingValues = innerPadding)
+                        deleteCity = {cityRepository.deleteCity(it)},
+                        modifier = Modifier.padding(paddingValues = innerPadding),
                     )
                 }
             }
@@ -62,11 +63,14 @@ class MainActivity : ComponentActivity() {
 @Composable
 fun CityListScreen(
     cities: List<String>,
-    onAddCity:(String)-> Unit,
-    modifier: Modifier = Modifier
+    onAddCity: (String) -> Unit,
+    deleteCity: (String) -> Unit,
+    modifier: Modifier = Modifier,
+
 
 ){
     var newCityName by remember {mutableStateOf("")}
+    var deletedCity by remember{mutableStateOf("")}
     Column(modifier = modifier.fillMaxSize()){
         Row(modifier = Modifier.padding(16.dp)) {
             OutlinedTextField(
@@ -86,6 +90,18 @@ fun CityListScreen(
             ) {
                 Text("Add City")
             }
+
+        }
+        Button(
+            onClick = {
+                if (deletedCity.isNotEmpty()) {
+                    deleteCity(deletedCity)
+                    deletedCity = ""
+
+                }
+            }
+        ){
+            Text("Delete City")
         }
 
             LazyColumn(modifier = modifier.fillMaxSize()) {
