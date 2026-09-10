@@ -37,7 +37,7 @@ class CityRepository{
     fun addCity(city:String){
         _cities.add(city)
     }
-    fun deleteCity(city:String){//deletes city from the string list
+    fun deleteCity(city:String){
         _cities.remove(city)
     }
 }
@@ -53,7 +53,7 @@ class MainActivity : ComponentActivity() {
                     CityListScreen(
                         cities = cityRepository.cities,
                         onAddCity = {cityRepository.addCity(it)},
-                        deleteCity = {cityRepository.deleteCity(it)},//deletes
+                        deleteCity = {cityRepository.deleteCity(it)},
                         modifier = Modifier.padding(paddingValues = innerPadding),
                     )
                 }
@@ -72,7 +72,7 @@ fun CityListScreen(
 
 ){
     var newCityName by remember {mutableStateOf("")}
-    var deletedCity by remember{mutableStateOf("")}//makes a deleted city variable like new citys var
+    var deletedCity by remember{mutableStateOf("")}
     Column(modifier = modifier.fillMaxSize()){
         Row(modifier = Modifier.padding(16.dp)) {
             OutlinedTextField(
@@ -97,7 +97,7 @@ fun CityListScreen(
         Button(
             onClick = {
                 if (deletedCity.isNotBlank()) {
-                    deleteCity(deletedCity)//deletes the city once the button is clicked(delete city)
+                    deleteCity(deletedCity)
                     deletedCity = ""
 
                 }
@@ -108,7 +108,7 @@ fun CityListScreen(
 
             LazyColumn(modifier = modifier.fillMaxSize()) {
                 items(cities) { city ->
-                    CityRow(city = city, onClick = {deletedCity=city})//selected city becomes deleted
+                    CityRow(city = city, onClick = {deletedCity=city})
                 }
             }
 
@@ -122,7 +122,7 @@ fun CityRow(city: String, onClick: () -> Unit){
         fontSize = 28.sp,
         modifier = Modifier
             .fillMaxWidth().clickable(){
-                onClick()//cities are clickable and selected once tapped.
+                onClick()
             }
             .padding(horizontal = 18.dp, vertical = 14.dp)
             .padding(horizontal = 18.dp, vertical = 14.dp)
