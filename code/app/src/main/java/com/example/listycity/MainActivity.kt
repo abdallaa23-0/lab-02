@@ -96,7 +96,7 @@ fun CityListScreen(
         }
         Button(
             onClick = {
-                if (deletedCity.isNotEmpty()) {
+                if (deletedCity.isNotBlank()) {
                     deleteCity(deletedCity)//deletes the city once the button is clicked(delete city)
                     deletedCity = ""
 
